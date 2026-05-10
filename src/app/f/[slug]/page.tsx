@@ -255,7 +255,7 @@ export default function DynamicRegistrationPage({ params }: { params: Promise<{ 
             </div>
           </div>
           <div className="text-center">
-            <h2 className="text-4xl md:text-6xl font-black text-gray-900 tracking-tight mb-4 px-4 leading-tight">
+            <h2 className="text-4xl md:text-6xl font-black text-[#4285F4] tracking-tight mb-4 px-4 leading-tight">
               {lang === 'en' ? formMeta?.title_en : formMeta?.title_ja}
             </h2>
             <p className="text-gray-600 font-bold text-lg max-w-md mx-auto leading-relaxed px-6">
