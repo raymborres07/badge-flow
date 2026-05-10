@@ -1,6 +1,6 @@
 # Registration and Survey Management System
 
-A professional multi-tenant registration portal and survey management system designed for event organizers. This platform enables the dynamic creation of registration forms, lanyard/certificate generation, and real-time attendee analytics.
+A multi-tenant registration portal and survey management system designed for event organizers specifically for GDGoC Nagoya University, although it can be edited and used by other GDGs. This platform enables the dynamic creation of registration forms, lanyard/certificate generation, and real-time attendee analytics.
 
 ## Core Features
 
