@@ -5,6 +5,25 @@ import { createClient } from '@/utils/supabase/client';
 import { useSearchParams } from 'next/navigation';
 import QRCode from 'react-qr-code';
 
+function getNameFontSize(name: string): string {
+  if (!name) return '1.875rem';
+  let weightedLen = 0;
+  for (let i = 0; i < name.length; i++) {
+    if (name.charCodeAt(i) > 255) {
+      weightedLen += 2;
+    } else {
+      weightedLen += 1;
+    }
+  }
+  const hasSpace = name.trim().includes(' ');
+  const threshold = hasSpace ? 12 : 15;
+  if (weightedLen > threshold) {
+    const scaledSize = Math.max(1.0, 1.875 * (threshold / weightedLen));
+    return `${scaledSize}rem`;
+  }
+  return '1.875rem';
+}
+
 function PrintContent() {
   const searchParams = useSearchParams();
   const formId = searchParams.get('id');
@@ -76,25 +95,28 @@ function PrintContent() {
               </div>
 
               {/* Header */}
-              <div className="flex flex-col items-center py-6 border-b border-gray-50 bg-gray-50/50">
+              <div className="flex flex-col items-center py-4 border-b border-gray-50 bg-gray-50/50">
                 <img src="/favicon.png" className="w-10 h-10 mb-2" />
                 <div className="text-lg font-black text-gray-900 leading-none">GDG On Campus</div>
                 <div className="text-[8px] font-bold text-gray-400 uppercase tracking-widest mt-1">Nagoya University</div>
               </div>
 
               {/* Body */}
-              <div className="flex-1 flex flex-col items-center justify-center p-6 text-center">
-                <div className="mb-4">
+              <div className="flex-1 flex flex-col items-center justify-center px-6 py-4 text-center">
+                <div className="mb-3">
                   <div className="text-lg font-black text-[#4285F4] tracking-tight">Tech de Tsunagaru</div>
                   <div className="text-[8px] font-black text-[#EA4335] uppercase tracking-[0.2em] mt-1">Event Badge</div>
                 </div>
 
-                <div className="flex flex-col items-center w-full mb-4">
-                  <div className="text-3xl font-black text-gray-900 leading-[1.1] px-4">
+                <div className="flex flex-col items-center w-full mb-3">
+                  <div 
+                    className="font-black text-gray-900 leading-[1.1] px-4 text-center"
+                    style={{ fontSize: getNameFontSize(reg.name) }}
+                  >
                     {reg.name}
                   </div>
                   {reg.industry && (
-                    <div className="text-sm font-bold text-gray-500 mt-1 px-6 line-clamp-1 italic">
+                    <div className="text-xs font-bold text-gray-500 mt-1 px-6 line-clamp-1 italic">
                       {reg.industry}
                     </div>
                   )}
@@ -102,7 +124,7 @@ function PrintContent() {
 
                 {/* Real QR Code */}
                 <div className="mt-2 flex flex-col items-center">
-                  <div className="bg-gray-100 p-3 rounded-[1.5rem] border border-gray-100">
+                  <div className="bg-gray-100 p-2 rounded-[1.25rem] border border-gray-100">
                     <div className="bg-white p-2 rounded-lg flex items-center justify-center border border-gray-100">
                       <QRCode 
                         value={qrValue}
@@ -117,7 +139,7 @@ function PrintContent() {
               </div>
 
               {/* Bottom Bar */}
-              <div className="flex w-full h-3 absolute bottom-0 left-0">
+              <div className="flex w-full h-3">
                 <div className="flex-1 bg-[#EA4335]" /><div className="flex-1 bg-[#4285F4]" /><div className="flex-1 bg-[#FBBC05]" /><div className="flex-1 bg-[#34A853]" />
               </div>
             </div>
@@ -126,9 +148,15 @@ function PrintContent() {
       </div>
 
       {/* Print Styles */}
-      <style jsx global>{`
+      <style dangerouslySetInnerHTML={{ __html: `
         @media print {
-          body { background: white !important; }
+          body {
+            background: white !important;
+          }
+          * {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+          }
           @page {
             size: A4;
             margin: 10mm;
@@ -137,7 +165,7 @@ function PrintContent() {
             break-inside: avoid;
           }
         }
-      `}</style>
+      `}} />
     </div>
   );
 }
